@@ -39,15 +39,18 @@ Someone reports an algae bloom at a location. By the time the drone arrives, the
 | Ergodic expert | 145.4 | 60.5 | 18 | 30.6s |
 | Learned policy | **134.5** | 58.0 | **14** | 15.7s |
 
-![Scenario 1](paths/scenario_01.png)
-![Scenario 2](paths/scenario_02.png)
-![Scenario 3](paths/scenario_03.png)
+Example scenarios where the learned policy did well:
+
+![Scenario 6](paths/scenario_06.png)
+![Scenario 13](paths/scenario_13.png)
+![Scenario 11](paths/scenario_11.png)
 
 More examples in [`paths/`](paths/).
 
 ## Observations
 
 - **The learned policy matched or slightly beat the expert** with fewer failures, at about half the compute. A likely reason: it was trained only on the expert's successful runs, so it never learned the behaviors that led to failures.
+- **The expert and learned policy fail on different scenarios.** In the first 20 test scenarios, the expert failed on two where the learned policy succeeded (Scenario 6 above), and vice versa.
 - **Compounding error did not collapse performance** here, even though behavior cloning is known to suffer when small mistakes lead to unfamiliar states.
 - **Greedy and ergodic performed about the same.** With a single bloom, flying toward the peak is hard to beat. Ergodic search is more useful when the target could be in several places.
 - **Lawnmower was worst** because the bloom drifts out of areas it already swept.
@@ -59,6 +62,10 @@ More examples in [`paths/`](paths/).
 - Training loss kept decreasing after validation accuracy plateaued around epoch 8 (mild overfitting).
 - About 10% of runs fail for every strategy, likely when the bloom drifts to the map edge and the predicted map shifts off the grid.
 - Simplified physics: constant current, one-cell moves, perfect sensor, single bloom.
+
+**Failure case:** when the bloom drifts far from the predicted location, the learned policy can loop, since it rarely saw these situations in the expert's demonstrations (compounding error).
+
+![Scenario 1](paths/scenario_01.png)
 
 ## Next steps
 
@@ -73,7 +80,8 @@ More examples in [`paths/`](paths/).
 - `dataset.py`: observation design and demonstration collection
 - `train.py`: behavior cloning in PyTorch
 - `evaluate.py`: closed-loop comparison of all strategies
-- `plot_paths.py`: side-by-side path images
+- `plot_paths.py`: side-by-side path images for the first 20 test scenarios
+- `pick.py`: step counts for each strategy on the first 20 test scenarios
 - `policy.pt`: trained model weights
 
 ## Run

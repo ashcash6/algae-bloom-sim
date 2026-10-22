@@ -39,18 +39,18 @@ Someone reports an algae bloom at a location. By the time the drone arrives, the
 | Ergodic expert | 145.4 | 60.5 | 18 | 30.6s |
 | Learned policy | **134.5** | 58.0 | **14** | 15.7s |
 
-Example scenarios where the learned policy did well:
+Representative test scenarios, with all three planners on the same map. In typical cases the learned policy closely follows the expert's route:
 
-![Scenario 6](paths/scenario_06.png)
-![Scenario 13](paths/scenario_13.png)
-![Scenario 11](paths/scenario_11.png)
+![Scenario 3](overlays/scenario_03.png)
+![Scenario 8](overlays/scenario_08.png)
+![Scenario 16](overlays/scenario_16.png)
 
-More examples in [`paths/`](paths/).
+All 20 overlays are in [`overlays/`](overlays/), and side-by-side versions are in [`paths/`](paths/).
 
 ## Observations
 
 - **The learned policy matched or slightly beat the expert** with fewer failures, at about half the compute. A likely reason: it was trained only on the expert's successful runs, so it never learned the behaviors that led to failures.
-- **The expert and learned policy fail on different scenarios.** In the first 20 test scenarios, the expert failed on two where the learned policy succeeded (Scenario 6 above), and vice versa.
+- **The expert and learned policy fail on different scenarios.** In the first 20 test scenarios, the expert failed on two where the learned policy succeeded (for example, Scenario 6), and vice versa.
 - **Compounding error did not collapse performance** here, even though behavior cloning is known to suffer when small mistakes lead to unfamiliar states.
 - **Greedy and ergodic performed about the same.** With a single bloom, flying toward the peak is hard to beat. Ergodic search is more useful when the target could be in several places.
 - **Lawnmower was worst** because the bloom drifts out of areas it already swept.
@@ -65,7 +65,7 @@ More examples in [`paths/`](paths/).
 
 **Failure case:** when the bloom drifts far from the predicted location, the learned policy can loop, since it rarely saw these situations in the expert's demonstrations (compounding error).
 
-![Scenario 1](paths/scenario_01.png)
+![Scenario 1](overlays/scenario_01.png)
 
 ## Next steps
 
@@ -81,6 +81,7 @@ More examples in [`paths/`](paths/).
 - `train.py`: behavior cloning in PyTorch
 - `evaluate.py`: closed-loop comparison of all strategies
 - `plot_paths.py`: side-by-side path images for the first 20 test scenarios
+- `plot_overlay.py`: all three planners overlaid on one map for the first 20 test scenarios
 - `pick.py`: step counts for each strategy on the first 20 test scenarios
 - `policy.pt`: trained model weights
 
@@ -92,4 +93,5 @@ python dataset.py
 python train.py
 python evaluate.py
 python plot_paths.py
+python plot_overlay.py
 ```

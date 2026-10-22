@@ -39,13 +39,21 @@ Someone reports an algae bloom at a location. By the time the drone arrives, the
 | Ergodic expert | 145.4 | 60.5 | 18 | 30.6s |
 | Learned policy | **134.5** | 58.0 | **14** | 15.7s |
 
-Representative test scenarios, with all three planners on the same map. In typical cases the learned policy closely follows the expert's route:
+Selected examples where the learned policy performs well. Averages across all 200 test scenarios are in the table above.
 
-![Scenario 3](overlays/scenario_03.png)
-![Scenario 8](overlays/scenario_08.png)
-![Scenario 16](overlays/scenario_16.png)
+**The learned policy succeeds where the expert gets stuck** (expert fails, greedy 192 steps, learned 32):
 
-All 20 overlays are in [`overlays/`](overlays/), and side-by-side versions are in [`paths/`](paths/).
+![Scenario 6](overlays/scenario_06.png)
+
+**The learned policy stays reliable where greedy fails** (greedy fails, expert 57, learned 56):
+
+![Scenario 13](overlays/scenario_13.png)
+
+**The learned policy beats its teacher** (expert 79 steps, learned 32):
+
+![Scenario 11](overlays/scenario_11.png)
+
+All 20 test scenarios are in [`overlays/`](overlays/).
 
 ## Observations
 
@@ -80,8 +88,8 @@ All 20 overlays are in [`overlays/`](overlays/), and side-by-side versions are i
 - `dataset.py`: observation design and demonstration collection
 - `train.py`: behavior cloning in PyTorch
 - `evaluate.py`: closed-loop comparison of all strategies
-- `plot_paths.py`: side-by-side path images for the first 20 test scenarios
-- `plot_overlay.py`: all three planners overlaid on one map for the first 20 test scenarios
+- `plot_paths.py`: side-by-side path images for the first 6 test scenarios
+- `plot_overlay.py`: zoomed side-by-side comparisons of all three planners for the first 20 test scenarios
 - `pick.py`: step counts for each strategy on the first 20 test scenarios
 - `policy.pt`: trained model weights
 
